@@ -32,21 +32,21 @@ public class SearchRelatedAccountGroupMemberships {
     // projectId: Google Cloud Project Id.
     String projectId = "project-id";
 
-    // HMAC SHA-256 hashed unique id of the customer.
-    ByteString hashedAccountId = ByteString.copyFrom(new byte[] {});
+    // Unique id of the customer.
+    String accountId = "default" + UUID.randomUUID().toString().split("-")[0];
 
-    searchRelatedAccountGroupMemberships(projectId, hashedAccountId);
+    searchRelatedAccountGroupMemberships(projectId, accountId);
   }
 
-  // List group memberships for the hashed account id.
+  // List group memberships for the account id.
   public static void searchRelatedAccountGroupMemberships(
-      String projectId, ByteString hashedAccountId) throws IOException {
+      String projectId, String accountId) throws IOException {
     try (RecaptchaEnterpriseServiceClient client = RecaptchaEnterpriseServiceClient.create()) {
 
       SearchRelatedAccountGroupMembershipsRequest request =
           SearchRelatedAccountGroupMembershipsRequest.newBuilder()
               .setProject(projectId)
-              .setHashedAccountId(hashedAccountId)
+              .setAccountId(accountId)
               .build();
 
       for (RelatedAccountGroupMembership groupMembership :
@@ -54,7 +54,7 @@ public class SearchRelatedAccountGroupMemberships {
         System.out.println(groupMembership.getName());
       }
       System.out.printf(
-          "Finished searching related account group memberships for %s!", hashedAccountId);
+          "Finished searching related account group memberships for %s!", accountId);
     }
   }
 }
